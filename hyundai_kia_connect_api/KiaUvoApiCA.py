@@ -112,7 +112,16 @@ class KiaUvoApiCA(ApiImpl):
         data = {"loginId": username, "password": password}
         headers = self.API_HEADERS
         headers.pop("accessToken", None)
-        response = self.sessions.post(url, json=data, headers=headers)
+
+        proxies = {
+            "http": "http://192.168.68.62:8080",
+            "https": "http://192.168.68.62:8080"
+        }
+
+        response = self.sessions.post(url, headers=headers, json=data, proxies=proxies)
+
+
+        # response = self.sessions.post(url, json=data, headers=headers)
         _LOGGER.debug(f"{DOMAIN} - Sign In Response {response.text}")
         response = response.json()
         self._check_response_for_errors(response)
